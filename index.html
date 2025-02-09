@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лічильник з Магазином</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        #counter {
+            font-size: 48px;
+            margin: 20px;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        #counter.animate {
+            transform: scale(1.2);
+            color: #4CAF50;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            background: linear-gradient(45deg, #4CAF50, #8BC34A);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin: 5px;
+        }
+
+        button:hover {
+            background: linear-gradient(45deg, #45a049, #7CB342);
+        }
+
+        #shop {
+            margin-top: 20px;
+        }
+
+        .upgrade {
+            background: linear-gradient(45deg, #2196F3, #03A9F4);
+        }
+
+        .upgrade:hover {
+            background: linear-gradient(45deg, #1976D2, #0288D1);
+        }
+    </style>
+</head>
+<body>
+    <div id="counter">0</div>
+    <button onclick="incrementCounter()">Додати 1</button>
+
+    <div id="shop">
+        <button class="upgrade" onclick="buyUpgrade(1)">Купити покращення (+1 за клік) - 10</button>
+        <button class="upgrade" onclick="buyUpgrade(10)">Купити покращення (+10 за клік) - 100</button>
+    </div>
+
+    <script>
+        let count = 0;
+        let incrementValue = 1;
+        let upgradeCosts = {1: 10, 10: 100};
+
+        function incrementCounter() {
+            const counterElement = document.getElementById('counter');
+            count += incrementValue;
+            counterElement.textContent = count;
+
+            counterElement.classList.add('animate');
+            setTimeout(() => {
+                counterElement.classList.remove('animate');
+            }, 300);
+        }
+
+        function buyUpgrade(value) {
+            if (count >= upgradeCosts[value]) {
+                count -= upgradeCosts[value];
+                incrementValue += value;
+                upgradeCosts[value] = Math.floor(upgradeCosts[value] * 2);
+
+                document.getElementById('counter').textContent = count;
+                updateUpgradeButtons();
+            } else {
+                alert('Недостатньо балів для покупки покращення!');
+            }
+        }
+
+        function updateUpgradeButtons() {
+            document.querySelectorAll('.upgrade').forEach(button => {
+                const value = parseInt(button.textContent.match(/\+(\d+)/)[1]);
+                button.textContent = `Купити покращення (+${value} за клік) - ${upgradeCosts[value]}`;
+            });
+        }
+    </script>
+</body>
+</html>
